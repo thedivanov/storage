@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./proto";
+
+
+service Storage {
+    rpc Get(GetRequest) returns (GetResponse) {}
+    rpc Set(SetRequest) returns (SetResponse) {}
+    rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+}
+
+message GetRequest {
+    string destination = 1;
+    string key = 2;
+}
+
+message GetResponse {
+    string key = 1;
+    string value = 2;
+    int64 expire = 3;
+}
+
+message SetRequest {
+    string destination = 1;
+    string key = 2;
+    string value = 3;
+    int64 expire = 4;
+}
+
+message SetResponse {
+    string destination = 1;
+    string key = 2;
+    string value = 3;
+    int64 expire = 4;
+}
+
+message DeleteRequest {
+    string destination = 1;
+    string key = 2;
+}
+
+message DeleteResponse {
+}

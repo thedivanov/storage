@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  memcached:
+    image: memcached:alpine3.17
+    ports:
+      - 11211:11211
+    networks:
+      - storage-net
+  storage:
+    build:
+      context: .
+      dockerfile: Dockerfile.storage
+    networks:
+      - storage-net
+    depends_on:
+      - memcached
+    environment:
+      - MEMCACHED_ADDR=memcached:11211
+      - GRPC_ADDR=0.0.0.0:9080
+    ports:
+      - 127.0.0.1:9080:9080
+  test:
+    build:
+      context: ../storage-test
+      dockerfile: Dockerfile
+    depends_on:
+      - storage
+    networks:
+      - storage-net
+
+
+networks:
+  storage-net:
+    driver: bridge
+
